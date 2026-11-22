@@ -1,0 +1,8 @@
+<span class="d-flex flex-wrap gap-2">
+  {% for part in widget.subwidgets %}
+    <label class="d-flex flex-column small gap-1">
+      {% cycle "Date" "Hour" "Minute" "AM / PM" %}
+      {% include part.template_name with widget=part %}
+    </label>
+  {% endfor %}
+</span>

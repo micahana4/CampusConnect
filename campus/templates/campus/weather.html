@@ -1,0 +1,40 @@
+{% extends "campus/base.html" %}
+{% block title %}Venue weather · CampusConnect{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Venue weather</h1>
+  <p>Plan outdoor activities with a three-day forecast for your venue.</p>
+</div>
+{% if venue %}
+  <form method="get" class="panel mb-4">
+    <label for="venue" class="form-label">Venue</label>
+    <div class="d-flex flex-wrap gap-2">
+      <select class="form-select w-auto" id="venue" name="venue">
+        {% for choice in venues %}
+          <option value="{{ choice.pk }}"{% if choice.pk == venue.pk %} selected{% endif %}>{{ choice.name }} · {{ choice.campus }}</option>
+        {% endfor %}
+      </select>
+      <button class="btn btn-primary">Show forecast</button>
+    </div>
+  </form>
+  <section class="panel" aria-labelledby="forecast-title">
+    <h2 id="forecast-title">{{ venue.name }}</h2>
+    {% if unavailable %}
+      <p role="status">The forecast is temporarily unavailable. Try again in a few minutes.</p>
+    {% else %}
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <caption>Dates follow the venue’s local time.</caption>
+          <thead><tr><th scope="col">Date</th><th scope="col">Low (°C)</th><th scope="col">High (°C)</th><th scope="col">Peak rain chance (%)</th></tr></thead>
+          <tbody>{% for day in days %}
+            <tr><th scope="row">{{ day.day|date:"D, M j" }}</th><td>{{ day.low|default_if_none:"—" }}</td><td>{{ day.high|default_if_none:"—" }}</td><td>{{ day.rain|default_if_none:"—" }}</td></tr>
+          {% endfor %}</tbody>
+        </table>
+      </div>
+      <p class="mb-0">Forecast by <a href="https://open-meteo.com/">Open-Meteo</a>.</p>
+    {% endif %}
+  </section>
+{% else %}
+  <p class="panel">Add a venue with coordinates to view its weather forecast.</p>
+{% endif %}
+{% endblock %}

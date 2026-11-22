@@ -1,0 +1,39 @@
+{% extends "campus/base.html" %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Campus overview</h1><p>Find an event, meet its organizers and locate the venue.</p></div>
+<div class="stats">
+  <a href="{% url 'campus:record_list' 'events' %}"><span>{{ event_count }}</span> Upcoming events</a>
+  <a href="{% url 'campus:record_list' 'organizations' %}"><span>{{ group_count }}</span> Organizations</a>
+  <a href="{% url 'campus:record_list' 'venues' %}"><span>{{ venue_count }}</span> Mapped venues</a>
+</div>
+<div class="overview-grid">
+<section class="panel">
+  <div class="panel-head"><h2>Upcoming events</h2><a href="{% url 'campus:record_list' 'events' %}">All events</a></div>
+  {% for event in upcoming %}
+  <div class="agenda-item">
+    <div class="date-tile"><span>{{ event.starts_at|date:"M" }}</span><strong>{{ event.starts_at|date:"d" }}</strong></div>
+    <div><a class="event-title" href="{% url 'campus:record_detail' 'events' event.pk %}">{{ event.title }}</a>
+      <p>{{ event.starts_at|date:"g:i A" }} · {{ event.venue.name }}</p><small>{{ event.organization.name }}</small>
+    </div>
+  </div>
+  {% empty %}<p class="empty">No upcoming events are scheduled.</p>{% endfor %}
+</section>
+<section class="panel">
+  <div class="panel-head"><h2>Venue map</h2><a href="{% url 'campus:record_list' 'venues' %}">All venues</a></div>
+  {% if markers %}
+  <div id="venue-map" aria-label="Interactive venue map"></div>
+  <p id="map-status" class="small" role="status"></p>
+  <details><summary>Browse venues as a list</summary><ul>{% for m in markers %}<li><a href="{{ m.url }}">{{ m.name }}</a> · {{ m.campus }}</li>{% endfor %}</ul></details>
+  {% else %}<p class="empty">Add a venue with coordinates to place it on the map.</p>{% endif %}
+</section>
+</div>
+{{ markers|json_script:"venue-data" }}
+{% endblock %}
+{% block scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+<script src="{% static 'campus/map.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends "campus/base.html" %}
+{% block title %}Sign in{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Sign in</h1></div>
+<form class="panel narrow edit-form" method="post">{% csrf_token %}{{ form.as_p }}<input type="hidden" name="next" value="{{ next }}"><button class="btn btn-primary">Sign in</button></form>
+{% endblock %}

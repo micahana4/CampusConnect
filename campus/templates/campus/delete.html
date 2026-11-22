@@ -1,0 +1,9 @@
+{% extends "campus/base.html" %}
+{% block title %}Delete {{ label }}{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Delete {{ label }}?</h1></div>
+<form method="post" class="panel narrow">
+  {% csrf_token %}<p>This will delete <strong>{{ obj }}</strong>.</p>
+  <div class="actions start"><button class="btn btn-danger">Delete {{ label }}</button><a href="{% url 'campus:record_detail' slug obj.pk %}">Cancel</a></div>
+</form>
+{% endblock %}
