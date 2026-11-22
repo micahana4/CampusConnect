@@ -1,13 +1,13 @@
 {% extends "campus/base.html" %}
-{% block title %}{{ plural|capfirst }}{% endblock %}
+{% block title %}{{ directory_name|capfirst }}{% endblock %}
 {% block content %}
-<div class="page-head actions"><h1>{{ plural|capfirst }}</h1>{% if may_add %}<a class="btn btn-primary" href="{% url 'campus:record_create' slug %}">Add {{ label }}</a>{% endif %}</div>
+<div class="page-head actions"><h1>{{ directory_name|capfirst }}</h1>{% if may_add %}<a class="btn btn-primary" href="{% url 'campus:record_create' slug %}">Add {{ label }}</a>{% endif %}</div>
 <div class="panel">
-  <form class="search" method="get"><label for="q">Search {{ plural }}</label><input id="q" name="q" type="search" value="{{ q }}"><button class="btn btn-outline-secondary">Search</button>{% if q %}<a href="{% url 'campus:record_list' slug %}">Clear</a>{% endif %}</form>
+  <form class="search" method="get"><label for="q">Search {{ directory_name }}</label><input id="q" name="q" type="search" value="{{ q }}"><button class="btn btn-outline-secondary">Search</button>{% if q %}<a href="{{ request.path }}">Clear</a>{% endif %}</form>
   <div class="table-responsive"><table class="table align-middle">
     <thead><tr>{% for h in headers %}<th scope="col">{{ h|capfirst }}</th>{% endfor %}</tr></thead>
     <tbody>{% for pk, values in rows %}<tr>{% for val in values %}<td>{% if forloop.first %}<a href="{% url 'campus:record_detail' slug pk %}">{{ val }}</a>{% else %}{{ val }}{% endif %}</td>{% endfor %}</tr>
-    {% empty %}<tr><td colspan="{{ headers|length }}">No matching {{ plural }}.</td></tr>{% endfor %}</tbody>
+    {% empty %}<tr><td colspan="{{ headers|length }}">No matching {{ directory_name }}.</td></tr>{% endfor %}</tbody>
   </table></div>
   {% if page.has_other_pages %}<nav aria-label="Results pages" class="pager">{% if page.has_previous %}<a href="?q={{ q|urlencode }}&amp;page={{ page.previous_page_number }}">Previous</a>{% endif %} Page {{ page.number }} of {{ page.paginator.num_pages }} {% if page.has_next %}<a href="?q={{ q|urlencode }}&amp;page={{ page.next_page_number }}">Next</a>{% endif %}</nav>{% endif %}
 </div>

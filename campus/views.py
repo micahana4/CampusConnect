@@ -62,12 +62,13 @@ def context(request, slug):
     }
 
 
+def upcoming_events():
+    return Event.objects.filter(starts_at__gte=timezone.now())
+
+
 @require_safe
 def dashboard(request):
-    now = timezone.now()
-    upcoming = Event.objects.select_related("organization", "venue", "category").filter(
-        starts_at__gte=now
-    ).order_by("starts_at", "pk")
+    upcoming = upcoming_events().select_related("organization", "venue", "category")
     venues = Venue.objects.select_related("campus").order_by("name", "pk")
     markers = [
         {
@@ -90,13 +91,14 @@ def dashboard(request):
 
 
 @require_safe
-def record_list(request, slug):
+def record_list(request, slug, upcoming=False):
     model = get_model(slug)
     denied = access(request, model, "view")
     if denied:
         return denied
     fields = LIST_FIELDS[model]
-    qs = model.objects.select_related().all()
+    qs = upcoming_events() if upcoming else model.objects.all()
+    qs = qs.select_related()
     if not qs.ordered:
         qs = qs.order_by("pk")
     query = request.GET.get("q", "").strip()
@@ -115,6 +117,7 @@ def record_list(request, slug):
     page = Paginator(qs, 20).get_page(request.GET.get("page"))
     return render(request, "campus/list.html", {
         **context(request, slug), "q": query, "page": page,
+        "directory_name": "upcoming events" if upcoming else model._meta.verbose_name_plural,
         "headers": [model._meta.get_field(f).verbose_name for f in fields],
         "rows": [(obj.pk, [getattr(obj, f) for f in fields]) for obj in page],
     })

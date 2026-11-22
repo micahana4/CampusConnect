@@ -6,7 +6,7 @@
 {% block content %}
 <div class="page-head"><h1>Campus overview</h1><p>Find an event, meet its organizers and locate the venue.</p></div>
 <div class="stats">
-  <a href="{% url 'campus:record_list' 'events' %}"><span>{{ event_count }}</span> Upcoming events</a>
+  <a href="{% url 'campus:upcoming_events' %}"><span>{{ event_count }}</span> Upcoming events</a>
   <a href="{% url 'campus:record_list' 'organizations' %}"><span>{{ group_count }}</span> Organizations</a>
   <a href="{% url 'campus:record_list' 'venues' %}"><span>{{ venue_count }}</span> Mapped venues</a>
 </div>

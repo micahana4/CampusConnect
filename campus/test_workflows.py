@@ -1,3 +1,6 @@
+from datetime import timedelta
+from unittest.mock import patch
+
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.test import TestCase
@@ -91,6 +94,37 @@ class LabWorkflowTests(TestCase):
         response = self.client.post(website, {"event": afternoon.pk, "student": student.pk})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Registration.objects.filter(event=afternoon, student=student).exists())
+
+    def test_upcoming_counter_opens_filtered_directory(self):
+        starting = Event.objects.get(title="Student Map Lab")
+        past = Event.objects.get(title="Campus Garden Walk")
+        past.starts_at = starting.starts_at - timedelta(days=1)
+        past.save(update_fields=["starts_at"])
+        all_events = reverse("campus:record_list", args=["events"])
+        upcoming = f"{all_events}upcoming/"
+
+        with patch("campus.views.timezone.now", return_value=starting.starts_at):
+            home = self.client.get(reverse("campus:dashboard"))
+            self.assertContains(home, f'<a href="{upcoming}"><span>1</span> Upcoming events</a>', html=True)
+            self.assertContains(home, f'<a href="{all_events}">All events</a>', html=True)
+            self.assertContains(self.client.get(all_events), past.title)
+            listing = self.client.get(upcoming)
+            self.assertContains(listing, starting.title)
+            self.assertNotContains(listing, past.title)
+
+    def test_upcoming_search_and_pagination_keep_the_filter(self):
+        event = Event.objects.get(title="Student Map Lab")
+        Event.objects.bulk_create([
+            Event(title=f"Lab session {day}", starts_at=event.starts_at + timedelta(days=day),
+                  category=event.category, venue=event.venue, organization=event.organization)
+            for day in range(1, 21)
+        ])
+        upcoming = reverse("campus:upcoming_events")
+        first = self.client.get(upcoming, {"q": "Lab"})
+        self.assertContains(first, f'<a href="{upcoming}">Clear</a>', html=True)
+        self.assertContains(first, '<a href="?q=Lab&amp;page=2">Next</a>', html=True)
+        second = self.client.get(upcoming, {"q": "Lab", "page": 2})
+        self.assertEqual([item.title for item in second.context["page"]], ["Lab session 20"])
 
     def test_private_records_and_public_map(self):
         self.assertContains(self.client.get("/"), "Learning Commons")
