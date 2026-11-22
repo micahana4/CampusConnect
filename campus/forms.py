@@ -4,7 +4,7 @@ from django import forms
 from django.forms import modelform_factory
 from django.utils import timezone
 
-from .models import Event
+from .models import Event, Registration
 
 
 class EventClockWidget(forms.MultiWidget):
@@ -61,7 +61,24 @@ class EventForm(forms.ModelForm):
         return selected
 
 
+class RegistrationEventChoiceField(forms.ModelChoiceField):
+    def __init__(self, queryset, **kwargs):
+        super().__init__(queryset.select_related("venue__campus"), **kwargs)
+
+    def label_from_instance(self, event):
+        return event.registration_label()
+
+
+class RegistrationForm(forms.ModelForm):
+    class Meta:
+        model = Registration
+        fields = "__all__"
+        field_classes = {"event": RegistrationEventChoiceField}
+
+
 def record_form(model):
     if model is Event:
         return EventForm
+    if model is Registration:
+        return RegistrationForm
     return modelform_factory(model, fields="__all__")

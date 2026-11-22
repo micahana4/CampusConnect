@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from .forms import RegistrationForm
 from .models import Campus, Category, Event, Organization, Registration, Student, Venue
 from .permissions import has_record_permission
 
@@ -45,6 +46,7 @@ class EventAdmin(admin.ModelAdmin):
 
 @admin.register(Registration)
 class RegistrationAdmin(admin.ModelAdmin):
+    form = RegistrationForm
     list_display = ["event", "student", "registered_at"]
     search_fields = ["event__title", "student__student_number"]
     readonly_fields = ["registered_at"]

@@ -2,6 +2,8 @@ from decimal import Decimal
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils import timezone
+from django.utils.formats import date_format
 
 
 class Campus(models.Model):
@@ -92,6 +94,11 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
+    def registration_label(self):
+        local_start = timezone.localtime(self.starts_at)
+        schedule = date_format(local_start, "M j, Y, g:i A")
+        return f"{self.title} — {schedule} — {self.venue} · #{self.pk}"
 
 
 class Registration(models.Model):

@@ -70,6 +70,28 @@ class LabWorkflowTests(TestCase):
                 self.assertEqual(self.client.post(detail+"delete/").status_code, 302)
                 self.assertFalse(model.objects.filter(pk=obj.pk).exists())
 
+    def test_registration_choices_distinguish_events_with_the_same_title(self):
+        morning = Event.objects.get(title="Student Map Lab")
+        afternoon = Event.objects.get(title="Campus Garden Walk")
+        Event.objects.filter(pk=morning.pk).update(title="Campus Workshop", starts_at="2026-11-25T01:00:00Z")
+        Event.objects.filter(pk=afternoon.pk).update(title="Campus Workshop", starts_at="2026-11-26T07:30:00Z")
+        expected_options = {
+            morning.pk: f"Campus Workshop — Nov 25, 2026, 9:00 AM — Learning Commons (Bayview Campus) · #{morning.pk}",
+            afternoon.pk: f"Campus Workshop — Nov 26, 2026, 3:30 PM — Garden Court (Bayview Campus) · #{afternoon.pk}",
+        }
+        self.client.force_login(self.manager)
+        website = reverse("campus:record_create", args=["registrations"])
+        for url in (website, reverse("admin:campus_registration_add"), "/api/registrations/"):
+            with self.subTest(url=url):
+                response = self.client.get(url, HTTP_ACCEPT="text/html")
+                for pk, label in expected_options.items():
+                    self.assertContains(response, f'<option value="{pk}">{label}</option>', html=True)
+
+        student = Student.objects.get(student_number="LAB-001")
+        response = self.client.post(website, {"event": afternoon.pk, "student": student.pk})
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Registration.objects.filter(event=afternoon, student=student).exists())
+
     def test_private_records_and_public_map(self):
         self.assertContains(self.client.get("/"), "Learning Commons")
         for slug in ["students", "registrations"]:

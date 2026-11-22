@@ -39,7 +39,14 @@ class EventSerializer(serializers.ModelSerializer):
         fields = ["id", "title", "starts_at", "category", "venue", "organization"]
 
 
+class RegistrationEventField(serializers.PrimaryKeyRelatedField):
+    def display_value(self, event):
+        return event.registration_label()
+
+
 class RegistrationSerializer(serializers.ModelSerializer):
+    event = RegistrationEventField(queryset=Event.objects.select_related("venue__campus"))
+
     class Meta:
         model = Registration
         fields = ["id", "event", "student", "registered_at"]
