@@ -1,0 +1,33 @@
+
+{% extends "campus/base.html" %}
+
+{% block title %}Complete Sign Up{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <h1>Complete Your Sign Up</h1>
+</div>
+
+<div class="panel narrow">
+    <p>
+        You're signing up for CampusConnect using your Google account.
+        Please complete the following information.
+    </p>
+
+    <form method="post" class="edit-form">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        {% if redirect_field_value %}
+            <input type="hidden"
+                   name="{{ redirect_field_name }}"
+                   value="{{ redirect_field_value }}">
+        {% endif %}
+
+        <button class="btn btn-primary" type="submit">
+            Complete Sign Up
+        </button>
+    </form>
+</div>
+{% endblock %}
