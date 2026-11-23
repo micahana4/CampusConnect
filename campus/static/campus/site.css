@@ -5,12 +5,40 @@ a{color:var(--forest);text-underline-offset:.2em}
 .mast{background:var(--deep);color:white}
 .topbar,.toplinks,.directory nav,.actions,.panel-head,.pager,.search{display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap}
 .topbar{justify-content:space-between;min-height:76px;padding:12px 0}
+.brand-block{display:flex;align-items:center;gap:1rem;min-width:0}
+.user-greeting{background:#f5d76e;color:var(--deep);padding:8px 16px;border-radius:20px;font-weight:600;font-size:.875rem;overflow-wrap:anywhere}
+.nav-toggle,.nav-close{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:44px;height:44px;padding:10px;color:white;background:transparent;border:1px solid #81988f;border-radius:6px;cursor:pointer}
+.nav-toggle[hidden],.toplinks[hidden],.directory[hidden]{display:none}
+.nav-toggle:hover,.nav-close:hover{background:#ffffff14}
+.nav-toggle:focus-visible,.nav-close:focus-visible,.toplinks a:focus-visible,.toplinks button:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.directory a:focus-visible{outline:3px solid var(--forest);outline-offset:3px;border-radius:4px}
+.nav-toggle-icon{display:flex;flex-direction:column;gap:5px;width:22px}
+.nav-toggle-icon span{display:block;width:100%;height:2px;background:currentColor;border-radius:2px}
+.nav-toggle[aria-expanded="true"] .nav-toggle-icon span:first-child{transform:translateY(7px) rotate(45deg)}
+.nav-toggle[aria-expanded="true"] .nav-toggle-icon span:nth-child(2){opacity:0}
+.nav-toggle[aria-expanded="true"] .nav-toggle-icon span:last-child{transform:translateY(-7px) rotate(-45deg)}
 .wordmark{font-size:1.36rem;letter-spacing:-.045em;font-weight:760;display:inline-flex;align-items:center;gap:.55rem}
 .emblem{font-family:Georgia,serif;font-style:italic;font-size:21px;color:var(--deep);display:grid;place-items:center;height:31px;width:31px;background:var(--sun);border-radius:50% 50% 16% 16%}
 .topbar a,.toplinks button{color:white;text-decoration:none}
 .toplinks{font-size:.92rem}.toplinks button{background:transparent;border:1px solid #81988f;border-radius:5px;padding:3px 10px}
 .directory{border-bottom:1px solid var(--line);background:var(--paper)}.directory nav{padding:12px 0;gap:1.45rem;font-size:.94rem}.directory a{text-decoration:none;color:var(--ink)}
 .directory a:hover,.toplinks a:hover,.event-title:hover{text-decoration:underline}
+html.nav-open,html.nav-open body{overflow:hidden}
+.nav-drawer{position:fixed;inset:0 auto 0 0;width:min(320px,calc(100vw - 48px));max-width:none;height:100%;height:100dvh;max-height:100%;margin:0;padding:0;border:0;background:var(--paper);color:var(--ink);box-shadow:12px 0 40px #0003}
+.nav-drawer[open]{display:flex;flex-direction:column;animation:nav-slide-in .2s ease-out}
+.nav-drawer::backdrop{background:#081e1bb3;animation:nav-backdrop-in .2s ease-out}
+.nav-drawer-header{display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:.5rem;padding:16px;background:var(--deep);color:white}
+.nav-drawer-header h2{display:flex;align-items:center;gap:.65rem;margin:0;color:inherit;font-size:1.15rem}
+.nav-drawer-content{min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:16px 16px max(16px,env(safe-area-inset-bottom))}
+.nav-drawer .toplinks{padding:0 0 16px;border:0}
+.nav-drawer .toplinks a,.nav-drawer .toplinks button{color:var(--ink);text-decoration:none}
+.nav-drawer .toplinks a:hover,.nav-drawer .toplinks button:hover{background:#e8efdf;text-decoration:underline}
+.nav-drawer .toplinks a:focus-visible,.nav-drawer .toplinks button:focus-visible{outline-color:var(--forest)}
+.nav-drawer .directory{border-top:1px solid var(--line);border-bottom:0}
+.nav-drawer .directory nav{width:100%;padding:16px 0 0}
+@keyframes nav-slide-in{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+@keyframes nav-backdrop-in{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.nav-drawer[open],.nav-drawer::backdrop{animation:none}}
 .main{padding:clamp(24px,4vw,56px) 0 72px}
 .page-head{margin-bottom:24px}.page-head p{font-size:1.05rem;color:var(--muted);margin:.6rem 0}
 h1,h2{color:var(--ink);line-height:1.14}h1{font:500 clamp(2.25rem,5vw,3.7rem)/1.05 Georgia,'Times New Roman',serif;letter-spacing:-.05em;margin:0}h2{font-size:1.3rem;font-weight:680;letter-spacing:-.03em;line-height:1.25}
@@ -30,4 +58,22 @@ input:not([type=hidden]):not([type=checkbox]),select,textarea{border:1px solid #
 .back{display:inline-block;margin-bottom:1.1rem}.btn-primary{--bs-btn-bg:var(--forest);--bs-btn-border-color:var(--forest);--bs-btn-hover-bg:var(--deep);--bs-btn-hover-border-color:var(--deep);--bs-btn-active-bg:var(--deep);--bs-btn-active-border-color:var(--deep)}
 .start{justify-content:flex-start}.detail-list{display:grid;grid-template-columns:9rem 1fr;gap:9px 16px;margin-bottom:24px}
 .detail-list dd{margin:0;overflow-wrap:anywhere}.detail-list dt{color:var(--muted)}.table{--bs-table-bg:transparent}.table td,.table th{padding:.65rem .5rem}.pager{margin-top:12px}
-@media(max-width:750px){.overview-grid{grid-template-columns:1fr}.stats a{align-items:start;flex-direction:column;gap:0;padding:12px;font-size:.85rem}.toplinks,.directory nav{gap:.7rem}.detail-list{grid-template-columns:1fr;gap:0}.detail-list dd{margin-bottom:.7rem}.search label{width:100%}}
+@media(max-width:750px){
+  .topbar{gap:.75rem;align-items:flex-start}
+  .brand-block{flex:1;flex-direction:column;align-items:flex-start;gap:.5rem}
+  .wordmark{font-size:clamp(1.05rem,4.6vw,1.36rem);white-space:nowrap;min-height:44px}
+  .emblem{flex-shrink:0}
+  .user-greeting{max-width:100%;padding:6px 12px}
+  .toplinks{flex-basis:100%;flex-direction:column;align-items:stretch;gap:.25rem;padding-top:.75rem;border-top:1px solid #81988f}
+  .toplinks a,.toplinks button,.directory a{display:flex;align-items:center;min-height:44px;padding:.6rem .75rem;font-size:1rem;border-radius:5px}
+  .toplinks a:hover,.toplinks button:hover{background:#ffffff14}
+  .toplinks form{margin:0}
+  .toplinks button{width:100%;text-align:left}
+  .directory nav{flex-direction:column;align-items:stretch;gap:.25rem;padding:12px 0}
+  .directory a:hover{background:#e8efdf}
+  .overview-grid{grid-template-columns:1fr}
+  .stats a{align-items:start;flex-direction:column;gap:0;padding:12px;font-size:.85rem}
+  .detail-list{grid-template-columns:1fr;gap:0}
+  .detail-list dd{margin-bottom:.7rem}
+  .search label{width:100%}
+}
