@@ -7,6 +7,7 @@ from campus.weather import venue_weather
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('', include('pwa.urls')),
     path("accounts/", include("allauth.urls")),
     path("api/token/", obtain_auth_token, name="api-token"),
     path("api/", include("campus.api_urls")),

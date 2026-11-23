@@ -15,7 +15,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions", "django.contrib.messages", "django.contrib.staticfiles", "django.contrib.sites",
     "rest_framework", "rest_framework.authtoken", "campus",
     "allauth", "allauth.account", "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.google", "pwa",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -84,3 +84,35 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
 }
+
+PWA_APP_NAME = 'CampusConnect'
+PWA_APP_DESCRIPTION = "A Progressive Web App version of CampusConnect"
+PWA_APP_THEME_COLOR = '#0A0A0A'
+PWA_APP_BACKGROUND_COLOR = '#FFFFFF'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ORIENTATION = 'portrait'
+PWA_APP_START_URL = '/'
+PWA_APP_STATUS_BAR_COLOR = 'default'
+PWA_APP_ICONS = [
+    {
+        'src': '/static/img/icon-192.png',
+        'sizes': '192x192'
+    },
+    {
+        'src': '/static/img/icon-512.png',
+        'sizes': '512x512'
+    }
+]
+PWA_APP_ICONS_APPLE = [
+    {
+        'src': '/static/img/icon-192.png',
+        'sizes': '192x192'
+    },
+    {
+        'src': '/static/img/icon-512.png',
+        'sizes': '512x512'
+    }
+]
+PWA_APP_DIR = 'ltr'
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static/js', 'serviceworker.js')
