@@ -1,0 +1,42 @@
+
+{% extends "campus/base.html" %}
+{% load socialaccount %}
+
+{% block title %}Sign in{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <h1>Sign in</h1>
+</div>
+
+<form class="panel narrow edit-form" method="post">
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+
+    <p>
+        {{ form.login.label_tag }}
+        {{ form.login }}
+        {{ form.login.errors }}
+    </p>
+
+    <p>
+        {{ form.password.label_tag }}
+        {{ form.password }}
+        {{ form.password.errors }}
+    </p>
+
+    <button class="btn btn-primary" type="submit">
+        Sign in
+    </button>
+</form>
+
+<div class="panel narrow" style="margin-top: 1rem; text-align: center;">
+    <p>Or sign in using</p>
+
+    <a class="btn btn-primary"
+       href="{% provider_login_url 'google' %}">
+        Continue with Google
+    </a>
+</div>
+{% endblock %}

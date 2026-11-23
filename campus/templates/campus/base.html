@@ -11,16 +11,25 @@
 <body>
   <a class="visually-hidden-focusable" href="#main">Skip to content</a>
   <header class="mast"><div class="wrap topbar">
-    <a class="wordmark" href="{% url 'campus:dashboard' %}"><span class="emblem" aria-hidden="true">C</span> CampusConnect</a>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <a class="wordmark" href="{% url 'campus:dashboard' %}">
+        <span class="emblem" aria-hidden="true">C</span> CampusConnect
+      </a>
+      {% if user.is_authenticated %}
+        <span style="background: #f5d76e; color: #173a34; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 14px;">
+          Hello, {{ user.first_name|default:user.username }}!
+        </span>
+      {% endif %}
+    </div>
     <nav class="toplinks" aria-label="Main">
       <a href="{% url 'campus:dashboard' %}">Overview</a><a href="/weather/">Venue weather</a>
       {% url 'api-root' as api_url %}
       {% if user.is_authenticated %}
         <a href="{{ api_url }}">API</a>
-        <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button>Sign out</button></form>
+        <form method="post" action="{% url 'account_logout' %}">{% csrf_token %}<button>Sign out</button></form>
       {% else %}
-        <a href="{% url 'login' %}?next={{ api_url|urlencode }}">API</a>
-        <a href="{% url 'login' %}">Sign in</a>
+        <a href="{% url 'account_login' %}?next={{ api_url|urlencode }}">API</a>
+        <a href="{% url 'account_login' %}">Sign in</a>
       {% endif %}
     </nav>
   </div></header>
