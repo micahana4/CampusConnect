@@ -129,10 +129,32 @@ def record_detail(request, slug, pk):
     denied = access(request, model, "view")
     if denied:
         return denied
+
     obj = get_object_or_404(model.objects.select_related(), pk=pk)
+
+    related_events = Event.objects.none()
+
+    if slug == "categories":
+        related_events = Event.objects.filter(category=obj)
+    elif slug == "organizations":
+        related_events = Event.objects.filter(organization=obj)
+    elif slug == "venues":
+        related_events = Event.objects.filter(venue=obj)
+    elif slug == "campuses":
+        related_events = Event.objects.filter(venue__campus=obj)
+
+    related_events = related_events.select_related(
+        "category", "organization", "venue"
+    ).order_by("starts_at")
+
     return render(request, "campus/detail.html", {
-        **context(request, slug), "obj": obj,
-        "fields": [(model._meta.get_field(f).verbose_name, getattr(obj, f)) for f in LIST_FIELDS[model]],
+        **context(request, slug),
+        "obj": obj,
+        "fields": [
+            (model._meta.get_field(f).verbose_name, getattr(obj, f))
+            for f in LIST_FIELDS[model]
+        ],
+        "related_events": related_events,
     })
 
 

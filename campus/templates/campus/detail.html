@@ -24,6 +24,32 @@
 {% if may_delete %}<a class="btn btn-outline-danger" href="{% url 'campus:record_delete' slug obj.pk %}">Delete</a>{% endif %}
 {% if slug == 'venues' %}<a class="btn btn-outline-secondary" href="/weather/?venue={{ obj.pk }}">Venue weather</a>{% endif %}
 </div></div>
+
+{% if slug == "categories" or slug == "organizations" or slug == "venues" or slug == "campuses" %}
+<section class="panel mt-4">
+    <h2>Related Events</h2>
+
+    {% if related_events %}
+        {% for event in related_events %}
+            <article class="event-item">
+                <h3>
+                    <a href="{% url 'campus:record_detail' 'events' event.pk %}">
+                        {{ event.title }}
+                    </a>
+                </h3>
+
+                <p><strong>Date:</strong> {{ event.starts_at|date:"F j, Y" }}</p>
+                <p><strong>Time:</strong> {{ event.starts_at|time:"g:i A" }}</p>
+                <p><strong>Organization:</strong> {{ event.organization }}</p>
+                <p><strong>Venue:</strong> {{ event.venue }}</p>
+            </article>
+        {% endfor %}
+    {% else %}
+        <p>No events are currently associated with this record.</p>
+    {% endif %}
+</section>
+{% endif %}
+
 {% endblock %}
 {% block scripts %}{% if slug == "venues" %}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
