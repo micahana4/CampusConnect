@@ -63,7 +63,7 @@ input:not([type=hidden]):not([type=checkbox]),select,textarea{border:1px solid #
   .brand-block{flex:1;flex-direction:column;align-items:flex-start;gap:.5rem}
   .wordmark{font-size:clamp(1.05rem,4.6vw,1.36rem);white-space:nowrap;min-height:44px}
   .emblem{flex-shrink:0}
-  .user-greeting{max-width:100%;padding:6px 12px}
+  .user-greeting{max-width:100%;padding:4px 10px}
   .toplinks{flex-basis:100%;flex-direction:column;align-items:stretch;gap:.25rem;padding-top:.75rem;border-top:1px solid #81988f}
   .toplinks a,.toplinks button,.directory a{display:flex;align-items:center;min-height:44px;padding:.6rem .75rem;font-size:1rem;border-radius:5px}
   .toplinks a:hover,.toplinks button:hover{background:#ffffff14}

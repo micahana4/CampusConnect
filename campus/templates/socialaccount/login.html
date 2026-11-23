@@ -1,6 +1,7 @@
-
 {% extends "campus/base.html" %}
 
+{% load static %}
+{% block head %}<link rel="stylesheet" href="{% static 'campus/signin.css' %}">{% endblock %}
 {% block title %}Continue with Google{% endblock %}
 
 {% block content %}
@@ -8,7 +9,7 @@
     <h1>Continue with Google</h1>
 </div>
 
-<div class="panel narrow">
+<div class="panel signin-panel">
     <p>
         You are about to sign in using your Google account.
     </p>
@@ -16,9 +17,7 @@
     <form method="post">
         {% csrf_token %}
 
-        <button class="btn btn-primary" type="submit">
-            Continue
-        </button>
+        {% include "account/google_button.html" %}
     </form>
 </div>
 {% endblock %}

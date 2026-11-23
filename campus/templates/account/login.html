@@ -1,6 +1,6 @@
-
 {% extends "campus/base.html" %}
-{% load socialaccount %}
+{% load socialaccount static %}
+{% block head %}<link rel="stylesheet" href="{% static 'campus/signin.css' %}">{% endblock %}
 
 {% block title %}Sign in{% endblock %}
 
@@ -9,7 +9,8 @@
     <h1>Sign in</h1>
 </div>
 
-<form class="panel narrow edit-form" method="post">
+<div class="panel signin-panel">
+<form class="edit-form" method="post">
     {% csrf_token %}
 
     {{ form.non_field_errors }}
@@ -31,12 +32,10 @@
     </button>
 </form>
 
-<div class="panel narrow" style="margin-top: 1rem; text-align: center;">
-    <p>Or sign in using</p>
-
-    <a class="btn btn-primary"
-       href="{% provider_login_url 'google' %}">
-        Continue with Google
-    </a>
+  <p class="signin-divider">or</p>
+  <form method="post" action="{% provider_login_url 'google' %}">
+    {% csrf_token %}
+    {% include "account/google_button.html" %}
+  </form>
 </div>
 {% endblock %}

@@ -1,0 +1,34 @@
+.signin-panel { width: 100%; max-width: 28rem; }
+.signin-panel .edit-form input:not([type=hidden]) { width: 100%; }
+.signin-panel .edit-form .btn { width: 100%; min-height: 44px; }
+.signin-divider {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  margin: 1rem 0;
+  color: var(--muted);
+  font-size: .875rem;
+}
+.signin-divider::before, .signin-divider::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--line);
+}
+.google-signin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #747775;
+  border-radius: 4px;
+  background: #fff;
+  color: #1f1f1f;
+  font: 500 14px/20px "Google Sans", Roboto, Arial, sans-serif;
+}
+.google-signin img { flex: none; object-fit: contain; }
+.google-signin:hover { background: #f8fafd; }
+.google-signin:active { background: #edf1f7; }
+.google-signin:focus-visible { outline: 3px solid #1a73e8; outline-offset: 3px; }

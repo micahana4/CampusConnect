@@ -1,4 +1,4 @@
-const CACHE_NAME = 'projectsite-cache-v4';
+const CACHE_NAME = 'projectsite-cache-v5-greeting';
 
 self.addEventListener('install', function(e) {
   e.waitUntil(
