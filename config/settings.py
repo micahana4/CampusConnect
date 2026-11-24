@@ -8,7 +8,7 @@ SECRET_KEY = (
     os.environ.get("DJANGO_SECRET_KEY", "local-campusconnect-development-only")
     if DEBUG else os.environ["DJANGO_SECRET_KEY"]
 )
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,[::1]").split(",")
+ALLOWED_HOSTS = os.environ.get("Campusconnect098.pythonanywhere.com", "DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,[::1]").split(",")
 
 INSTALLED_APPS = [
     "django.contrib.admin", "django.contrib.auth", "django.contrib.contenttypes",
